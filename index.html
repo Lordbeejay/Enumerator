@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: road-sign header, strategy + loop route strip, calendar grid, dated site log, risks. */
+/* Layout: road-sign header, loop route strip, calendar grid, dated site log. */
 :root{
   --bg:#f3f4f1; --surface:#ffffff; --fg:#1d2420; --muted:#5d6862; --line:#d6dbd6;
   --sign:#0f6b45; --sign-fg:#ffffff;
@@ -54,13 +54,6 @@ header.sign p{margin:0;max-width:68ch;opacity:.92}
 .stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:14px;font-family:var(--mono);font-size:13px}
 .stats b{font-size:18px;font-family:var(--display);font-weight:700;margin-right:4px}
 h2{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 10px;text-wrap:balance}
-.lede{margin:0 0 14px;max-width:72ch;color:var(--muted)}
-.strategy{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
-.card h3{font-family:var(--display);font-size:15px;margin:0 0 6px}
-.card p,.card ul{margin:0;color:var(--muted);font-size:14px}
-.card ul{padding-left:18px;display:grid;gap:4px}
-.card b{color:var(--fg)}
 .route-scroll{overflow-x:auto;margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
 .route{display:flex;align-items:flex-start;min-width:900px}
 .stop{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;gap:4px;min-width:0}
@@ -125,15 +118,6 @@ td.date{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-n
   </header>
 
   <section>
-    <h2>Strategy: turn the Aklan trip into a Panay loop</h2>
-    <p class="lede">Your answer is yes, and the plan goes further than one extra day. You have to travel to Aklan and back anyway. Going up the Capiz side and coming home down the Antique side passes 7 of the 12 sites, so most of the travel time is already paid for.</p>
-    <div class="strategy">
-      <div class="card"><h3>1 · Roxas only fits on this trip</h3><p>You can't collect data during the Oct 12–13 agenda, and you are unavailable on both sides of it (Oct 10–11 and 14–16). <b>Roxas City is on the Iloilo–Kalibo route through Capiz</b>, so it's done the day before the Aklan agenda. Pototan and Passi are on the same road.</p></div>
-      <div class="card"><h3>2 · Stay after the agenda and come home through Antique</h3><p>After the agenda, stay on for <b>Kalibo, Nabas and Caticlan</b>. Then return by the west coast road through Antique instead of retracing the Capiz route. That road passes <b>San Jose (Dalipe)</b>. It adds roughly 2 hours and one overnight, but it saves a separate 5-hour round trip to Antique.</p></div>
-      <div class="card"><h3>3 · Keep the city sites for home-base days</h3><p>Jaro, Parola, Oton–Guimbal and Pavia–Sta. Barbara are within an hour of Iloilo City. They fill the free days before and after the loop and need no accommodation. Jaro goes first as the pilot so the questionnaire is final before the loop.</p></div>
-      <div class="card"><h3>What you gain</h3><ul><li>All sites done by <b>Oct 28</b>, before the Undas rush.</li><li>About <b>3 travel days saved</b> compared with separate trips to Roxas, Passi–Pototan and San Jose.</li><li>3 make-up days are left for rain or short quotas during typhoon season.</li></ul></div>
-    </div>
-
     <div class="route-scroll" aria-label="Loop route">
       <div class="route">
         <div class="stop"><div class="dot base">IL</div><div class="nm">Iloilo City</div><div class="dt">Oct 19 · 6 AM</div></div>
@@ -172,19 +156,8 @@ td.date{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-n
       </table>
     </div>
   </section>
-
-  <section>
-    <h2>Risks and fallbacks</h2>
-    <div class="strategy">
-      <div class="card"><h3>Heavy two-site days</h3><p>Oct 19, Oct 24 and Oct 27 each cover two sites under an hour apart. With 4 or more enumerators, split into two sub-teams so both sites run at the same time and the day ends by noon. With a small team, start at 7 AM and accept a long day.</p></div>
-      <div class="card"><h3>West coast transport on Sunday</h3><p>Vans from Caticlan to San Jose run less often on Sundays. Confirm a departure or hire a van ahead. If it falls through, go home through Kalibo and Capiz on Oct 25, and do San Jose as a day trip on Oct 29 (make-up day 1).</p></div>
-      <div class="card"><h3>Typhoon or heavy rain</h3><p>The loop sites are the expensive ones to redo, so they take priority. If weather hits, move a home-base site (Oton, Pavia–Sta. Barbara) into a make-up day rather than cutting a loop site.</p></div>
-      <div class="card"><h3>Confirm before Oct 19</h3><ul><li>The Aklan agenda venue. The plan assumes Kalibo.</li><li>Courtesy letters to the Roxas terminal and malls, the Kalibo terminals, Caticlan port and Dalipe Terminal. You can deliver the Roxas letters in person on Oct 12–13.</li><li>Lodging: Roxas (Oct 19), Kalibo (Oct 20–23), Caticlan or Nabas (Oct 24), San Jose (Oct 25).</li></ul></div>
-      <div class="card"><h3>Optional add-on</h3><p>Ivisan crossing and Tigbauan appear in the sheet without site numbers. Ivisan is on the loop between Roxas and Kalibo, and Tigbauan is between Oton and Guimbal. Each can take a short top-up survey on a make-up day if you decide to add them.</p></div>
-      <div class="card"><h3>Travel times are estimates</h3><p>The durations on the route are typical bus and van times on these roads, not schedules. Check them with operators (Ceres, local vans) when you book.</p></div>
-    </div>
-  </section>
 </div>
+
 
 <script>
 const plan = {
