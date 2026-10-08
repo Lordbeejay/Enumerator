@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panay Travelers Survey Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: road-sign header, strategy + loop route strip, calendar grid, dated site log, risks. */
+:root{
+  --bg:#f3f4f1; --surface:#ffffff; --fg:#1d2420; --muted:#5d6862; --line:#d6dbd6;
+  --sign:#0f6b45; --sign-fg:#ffffff;
+  --field:#0f6b45; --field-bg:#dcefe4;
+  --loop:#a5520f; --loop-bg:#f8e3cf;
+  --agenda:#8a5a00; --agenda-bg:#fbebc4;
+  --off:#7a2e2e; --off-bg:#f4dcdc;
+  --holiday:#5a3f86; --holiday-bg:#e7def4;
+  --buffer:#3d5f7a; --buffer-bg:#dde8f1;
+  --past:#c9cec9;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --surface:#1c2320; --fg:#e6ebe7; --muted:#9aa59f; --line:#2f3934;
+  --sign:#1e8a5c; --sign-fg:#ffffff;
+  --field:#7fd3a6; --field-bg:#1d3a2c;
+  --loop:#f2a868; --loop-bg:#43301f;
+  --agenda:#f0c46b; --agenda-bg:#3d3018;
+  --off:#f0a3a3; --off-bg:#432525;
+  --holiday:#c6b0ec; --holiday-bg:#332a47;
+  --buffer:#a3c4de; --buffer-bg:#22313d;
+  --past:#3a433f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141917; --surface:#1c2320; --fg:#e6ebe7; --muted:#9aa59f; --line:#2f3934;
+  --sign:#1e8a5c; --sign-fg:#ffffff;
+  --field:#7fd3a6; --field-bg:#1d3a2c;
+  --loop:#f2a868; --loop-bg:#43301f;
+  --agenda:#f0c46b; --agenda-bg:#3d3018;
+  --off:#f0a3a3; --off-bg:#432525;
+  --holiday:#c6b0ec; --holiday-bg:#332a47;
+  --buffer:#a3c4de; --buffer-bg:#22313d;
+  --past:#3a433f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:24px 48px;display:grid;gap:30px}
+header.sign{background:var(--sign);color:var(--sign-fg);border-radius:10px;padding:20px 22px;outline:2px solid var(--sign-fg);outline-offset:-8px}
+header.sign .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+header.sign h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,4vw,34px);line-height:1.1;margin:6px 0 8px;text-wrap:balance}
+header.sign p{margin:0;max-width:68ch;opacity:.92}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:14px;font-family:var(--mono);font-size:13px}
+.stats b{font-size:18px;font-family:var(--display);font-weight:700;margin-right:4px}
+h2{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 10px;text-wrap:balance}
+.lede{margin:0 0 14px;max-width:72ch;color:var(--muted)}
+.strategy{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.card h3{font-family:var(--display);font-size:15px;margin:0 0 6px}
+.card p,.card ul{margin:0;color:var(--muted);font-size:14px}
+.card ul{padding-left:18px;display:grid;gap:4px}
+.card b{color:var(--fg)}
+.route-scroll{overflow-x:auto;margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+.route{display:flex;align-items:flex-start;min-width:900px}
+.stop{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;gap:4px;min-width:0}
+.stop::before{content:"";position:absolute;top:14px;left:-50%;width:100%;height:3px;background:var(--loop);z-index:0}
+.stop:first-child::before{display:none}
+.dot{width:30px;height:30px;border-radius:50%;background:var(--loop);color:var(--bg);font-family:var(--display);font-weight:800;font-size:13px;display:grid;place-items:center;z-index:1;border:3px solid var(--surface)}
+.dot.base{background:var(--fg)}
+.dot.ag{background:var(--agenda)}
+.stop .nm{font-weight:600;font-size:13px;line-height:1.2}
+.stop .dt{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.leg{font-family:var(--mono);font-size:10.5px;color:var(--loop);margin-top:2px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin-bottom:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block;border:2px solid}
+.cal-scroll{overflow-x:auto}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(118px,1fr));gap:4px;min-width:860px}
+.dow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:2px 6px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:108px;padding:6px 7px;display:flex;flex-direction:column;gap:3px;border-top-width:4px}
+.day .d{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.day .t{font-weight:600;font-size:13px;line-height:1.25}
+.day .s{font-size:12px;color:var(--muted);line-height:1.3}
+.pill{font-family:var(--mono);font-size:10.5px;font-weight:600;border-radius:4px;padding:0 5px;align-self:flex-start;color:var(--bg)}
+.day.field{border-top-color:var(--field);background:var(--field-bg)}
+.day.field .pill{background:var(--field)}
+.day.loop{border-top-color:var(--loop);background:var(--loop-bg)}
+.day.loop .pill{background:var(--loop)}
+.day.agenda{border-top-color:var(--agenda);background:var(--agenda-bg)}
+.day.off{border-top-color:var(--off);background:var(--off-bg)}
+.day.holiday{border-top-color:var(--holiday);background:var(--holiday-bg)}
+.day.buffer{border-top-color:var(--buffer);background:var(--buffer-bg)}
+.day.past{opacity:.45;border-top-color:var(--past)}
+.day.empty{background:transparent;border:none}
+.day.today{box-shadow:0 0 0 2px var(--fg) inset}
+.monthlabel{grid-column:1/-1;font-family:var(--display);font-weight:700;font-size:15px;padding:10px 2px 2px}
+.table-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:none}
+td.num{font-family:var(--display);font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+td.num.m{color:var(--field)} td.num.l{color:var(--loop)}
+td.date{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.tag.m{background:var(--field-bg);color:var(--field)} .tag.l{background:var(--loop-bg);color:var(--loop)}
+.muted{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="sign">
+    <div class="eyebrow">UP Study · Travelers Survey · Region VI</div>
+    <h1>Field Research Timeline, Oct 8 – Nov 7, 2026</h1>
+    <p>All 12 numbered sites from the Travelers Survey sheet are done by Oct 28. Seven of them fall on one Panay loop wrapped around the Aklan agenda, and five are day trips from Iloilo City. Each site takes about 4 hours, with 30 target respondents.</p>
+    <div class="stats">
+      <span><b>12</b>sites</span>
+      <span><b>9</b>field days</span>
+      <span><b>7</b>sites on the loop</span>
+      <span><b>Oct 28</b>last site</span>
+      <span><b>3</b>make-up days</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Strategy: turn the Aklan trip into a Panay loop</h2>
+    <p class="lede">Your answer is yes, and the plan goes further than one extra day. You have to travel to Aklan and back anyway. Going up the Capiz side and coming home down the Antique side passes 7 of the 12 sites, so most of the travel time is already paid for.</p>
+    <div class="strategy">
+      <div class="card"><h3>1 · Roxas only fits on this trip</h3><p>You can't collect data during the Oct 12–13 agenda, and you are unavailable on both sides of it (Oct 10–11 and 14–16). <b>Roxas City is on the Iloilo–Kalibo route through Capiz</b>, so it's done the day before the Aklan agenda. Pototan and Passi are on the same road.</p></div>
+      <div class="card"><h3>2 · Stay after the agenda and come home through Antique</h3><p>After the agenda, stay on for <b>Kalibo, Nabas and Caticlan</b>. Then return by the west coast road through Antique instead of retracing the Capiz route. That road passes <b>San Jose (Dalipe)</b>. It adds roughly 2 hours and one overnight, but it saves a separate 5-hour round trip to Antique.</p></div>
+      <div class="card"><h3>3 · Keep the city sites for home-base days</h3><p>Jaro, Parola, Oton–Guimbal and Pavia–Sta. Barbara are within an hour of Iloilo City. They fill the free days before and after the loop and need no accommodation. Jaro goes first as the pilot so the questionnaire is final before the loop.</p></div>
+      <div class="card"><h3>What you gain</h3><ul><li>All sites done by <b>Oct 28</b>, before the Undas rush.</li><li>About <b>3 travel days saved</b> compared with separate trips to Roxas, Passi–Pototan and San Jose.</li><li>3 make-up days are left for rain or short quotas during typhoon season.</li></ul></div>
+    </div>
+
+    <div class="route-scroll" aria-label="Loop route">
+      <div class="route">
+        <div class="stop"><div class="dot base">IL</div><div class="nm">Iloilo City</div><div class="dt">Oct 19 · 6 AM</div></div>
+        <div class="stop"><div class="dot">6</div><div class="nm">Pototan</div><div class="dt">Oct 19 AM</div><div class="leg">~1 h</div></div>
+        <div class="stop"><div class="dot">5</div><div class="nm">Passi City</div><div class="dt">Oct 19 PM</div><div class="leg">~45 min</div></div>
+        <div class="stop"><div class="dot">2</div><div class="nm">Roxas City</div><div class="dt">Oct 20 AM</div><div class="leg">~1.5–2 h</div></div>
+        <div class="stop"><div class="dot ag">AG</div><div class="nm">Aklan agenda</div><div class="dt">Oct 21–23</div><div class="leg">~2 h</div></div>
+        <div class="stop"><div class="dot">9</div><div class="nm">Kalibo</div><div class="dt">Oct 24 AM</div></div>
+        <div class="stop"><div class="dot">10</div><div class="nm">Nabas</div><div class="dt">Oct 24 PM</div><div class="leg">~1 h</div></div>
+        <div class="stop"><div class="dot">11</div><div class="nm">Caticlan</div><div class="dt">Oct 25 AM</div><div class="leg">~40 min</div></div>
+        <div class="stop"><div class="dot">8</div><div class="nm">San Jose, Antique</div><div class="dt">Oct 26 AM</div><div class="leg">~4–5 h</div></div>
+        <div class="stop"><div class="dot base">IL</div><div class="nm">Iloilo City</div><div class="dt">Oct 26 PM</div><div class="leg">~2.5 h</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Calendar</h2>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--loop-bg);border-color:var(--loop)"></i>Loop survey (away from Iloilo)</span>
+      <span><i class="sw" style="background:var(--field-bg);border-color:var(--field)"></i>Home-base survey</span>
+      <span><i class="sw" style="background:var(--agenda-bg);border-color:var(--agenda)"></i>Other agenda</span>
+      <span><i class="sw" style="background:var(--off-bg);border-color:var(--off)"></i>You are unavailable</span>
+      <span><i class="sw" style="background:var(--holiday-bg);border-color:var(--holiday)"></i>Undas break</span>
+      <span><i class="sw" style="background:var(--buffer-bg);border-color:var(--buffer)"></i>Prep, make-up, encoding</span>
+    </div>
+    <div class="cal-scroll"><div class="cal" id="cal"></div></div>
+  </section>
+
+  <section>
+    <h2>Site schedule</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Date</th><th>Site</th><th>Leg</th><th>Location</th><th>Survey point</th><th>Window</th><th>Logistics</th></tr></thead>
+        <tbody id="sites"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Risks and fallbacks</h2>
+    <div class="strategy">
+      <div class="card"><h3>Heavy two-site days</h3><p>Oct 19, Oct 24 and Oct 27 each cover two sites under an hour apart. With 4 or more enumerators, split into two sub-teams so both sites run at the same time and the day ends by noon. With a small team, start at 7 AM and accept a long day.</p></div>
+      <div class="card"><h3>West coast transport on Sunday</h3><p>Vans from Caticlan to San Jose run less often on Sundays. Confirm a departure or hire a van ahead. If it falls through, go home through Kalibo and Capiz on Oct 25, and do San Jose as a day trip on Oct 29 (make-up day 1).</p></div>
+      <div class="card"><h3>Typhoon or heavy rain</h3><p>The loop sites are the expensive ones to redo, so they take priority. If weather hits, move a home-base site (Oton, Pavia–Sta. Barbara) into a make-up day rather than cutting a loop site.</p></div>
+      <div class="card"><h3>Confirm before Oct 19</h3><ul><li>The Aklan agenda venue. The plan assumes Kalibo.</li><li>Courtesy letters to the Roxas terminal and malls, the Kalibo terminals, Caticlan port and Dalipe Terminal. You can deliver the Roxas letters in person on Oct 12–13.</li><li>Lodging: Roxas (Oct 19), Kalibo (Oct 20–23), Caticlan or Nabas (Oct 24), San Jose (Oct 25).</li></ul></div>
+      <div class="card"><h3>Optional add-on</h3><p>Ivisan crossing and Tigbauan appear in the sheet without site numbers. Ivisan is on the loop between Roxas and Kalibo, and Tigbauan is between Oton and Guimbal. Each can take a short top-up survey on a make-up day if you decide to add them.</p></div>
+      <div class="card"><h3>Travel times are estimates</h3><p>The durations on the route are typical bus and van times on these roads, not schedules. Check them with operators (Ceres, local vans) when you book.</p></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const plan = {
+  "2026-10-08":["buffer","Preparation","Letters to LGUs and terminals, print forms, enumerator briefing"],
+  "2026-10-09":["field","Jaro, Iloilo City","Ceres Tagbak / Jaro Plaza · 7–11 AM · pilot","3"],
+  "2026-10-10":["off","Unavailable",""],
+  "2026-10-11":["off","Unavailable",""],
+  "2026-10-12":["agenda","Roxas City agenda","No data collection. Deliver letters to Roxas sites."],
+  "2026-10-13":["agenda","Roxas City agenda","No data collection"],
+  "2026-10-14":["off","Unavailable",""],
+  "2026-10-15":["off","Unavailable",""],
+  "2026-10-16":["off","Unavailable",""],
+  "2026-10-17":["field","Parola (Guimaras route)","Ferry terminal · 7–11 AM · PM: encode pilot data","12"],
+  "2026-10-18":["buffer","Rest and pack","Confirm loop lodging and transport"],
+  "2026-10-19":["loop","Pototan → Passi","Pototan 7–11 AM · Passi 12–4 PM · overnight Roxas","6 · 5"],
+  "2026-10-20":["loop","Roxas City → Kalibo","Roxas 7–11 AM · travel to Kalibo","2"],
+  "2026-10-21":["agenda","Aklan agenda","Evenings: encode loop data"],
+  "2026-10-22":["agenda","Aklan agenda",""],
+  "2026-10-23":["agenda","Aklan agenda",""],
+  "2026-10-24":["loop","Kalibo → Nabas","Kalibo 7–11 AM · Nabas 12:30–4:30 PM","9 · 10"],
+  "2026-10-25":["loop","Caticlan → San Jose","Caticlan 6:30–10:30 AM · west coast road","11"],
+  "2026-10-26":["loop","San Jose, Antique","Dalipe 7–11 AM · home to Iloilo","8"],
+  "2026-10-27":["field","Guimbal → Oton","Guimbal 7–11 AM · Oton 12:30–4:30 PM","1 · 4"],
+  "2026-10-28":["field","Pavia–Sta. Barbara","Airport / C1 road · 7–11 AM · last site","7"],
+  "2026-10-29":["buffer","Make-up day 1","Rain-outs or short quotas"],
+  "2026-10-30":["buffer","Encoding","Undas rush starts, no surveys"],
+  "2026-10-31":["holiday","Undas","Usually a special non-working day"],
+  "2026-11-01":["holiday","All Saints' Day",""],
+  "2026-11-02":["holiday","All Souls' Day","Usually a special non-working day"],
+  "2026-11-03":["buffer","Make-up day 2",""],
+  "2026-11-04":["buffer","Make-up day 3",""],
+  "2026-11-05":["buffer","Data cleaning","360 target respondents"],
+  "2026-11-06":["buffer","Preliminary tabulation",""],
+  "2026-11-07":["buffer","Reserve",""]
+};
+const sites = [
+  ["2026-10-09","3","m","Jaro, Iloilo City","Ceres Terminal Tagbak, van terminal, Fish Port, Jaro Plaza","7–11 AM","Pilot. Finalize the questionnaire before the loop."],
+  ["2026-10-17","12","m","Guimaras route (Iloilo side)","Parola wharf","7–11 AM","Saturday crossings are busy, so the quota fills quickly."],
+  ["2026-10-19","6","l","Pototan, Iloilo","Pototan Plaza","7–11 AM","Leave Iloilo ~6 AM (~1 h)."],
+  ["2026-10-19","5","l","Passi City, Iloilo","Along City Hall / Paluto","12–4 PM","~45 min from Pototan. Continue to Roxas (~1.5–2 h), overnight."],
+  ["2026-10-20","2","l","Roxas City, Capiz","Malls / integrated terminal","7–11 AM","Then ~2 h to Kalibo, check in before the agenda."],
+  ["2026-10-24","9","l","Kalibo, Aklan","Terminal to Tangalan / Elizabeth Joy terminal","7–11 AM","First morning after the agenda."],
+  ["2026-10-24","10","l","Nabas, Aklan","Crossing Nabas","12:30–4:30 PM","~1 h from Kalibo. Overnight Nabas or Caticlan."],
+  ["2026-10-25","11","l","Malay, Aklan (Boracay gateway)","Caticlan port / terminal","6:30–10:30 AM","Then ~4–5 h down the west coast to San Jose, overnight."],
+  ["2026-10-26","8","l","San Jose, Antique","Dalipe Terminal","7–11 AM","~2.5 h home to Iloilo. Loop ends."],
+  ["2026-10-27","1","m","Guimbal, Iloilo","Near Guimbal Hospital","7–11 AM","Furthest point first, then work back toward the city."],
+  ["2026-10-27","4","m","Oton, Iloilo","Oton Plaza","12:30–4:30 PM","~30 min from Guimbal on the same highway."],
+  ["2026-10-28","7","m","Pavia–Santa Barbara, Iloilo","Iloilo International Airport, C1 road near Jollibee, Banga Dama","7–11 AM","Last site."]
+];
+const fmt = d => new Date(d+"T00:00:00");
+const todayISO = "2026-10-08";
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const cal = document.getElementById("cal");
+function addMonth(label,start,end){
+  const m=document.createElement("div");m.className="monthlabel";m.textContent=label;cal.appendChild(m);
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(n=>{const h=document.createElement("div");h.className="dow";h.textContent=n;cal.appendChild(h)});
+  const s=fmt(start),e=fmt(end);
+  for(let i=0;i<s.getDay();i++){const x=document.createElement("div");x.className="day empty";cal.appendChild(x)}
+  for(let d=new Date(s);d<=e;d.setDate(d.getDate()+1)){
+    const k=iso(d),p=plan[k],el=document.createElement("div");
+    el.className="day "+(p?p[0]:(k<todayISO?"past":""));
+    if(k===todayISO)el.classList.add("today");
+    const top=document.createElement("div");top.className="d";
+    top.innerHTML="<span>"+d.getDate()+"</span>"+(k===todayISO?"<span>today</span>":"");
+    el.appendChild(top);
+    if(p){
+      if(p[3]){const pl=document.createElement("span");pl.className="pill";pl.textContent=(p[3].includes("·")?"SITES ":"SITE ")+p[3];el.appendChild(pl)}
+      const t=document.createElement("div");t.className="t";t.textContent=p[1];el.appendChild(t);
+      if(p[2]){const s2=document.createElement("div");s2.className="s";s2.textContent=p[2];el.appendChild(s2)}
+    }
+    cal.appendChild(el);
+  }
+}
+addMonth("October 2026","2026-10-01","2026-10-31");
+addMonth("November 2026 (first week)","2026-11-01","2026-11-07");
+const tb=document.getElementById("sites");
+const dn=d=>fmt(d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+sites.forEach(r=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td class="date">${dn(r[0])}</td><td class="num ${r[2]}">${r[1]}</td><td><span class="tag ${r[2]}">${r[2]==="l"?"Loop":"Home base"}</span></td><td>${r[3]}</td><td>${r[4]}</td><td class="date">${r[5]}</td><td class="muted">${r[6]}</td>`;
+  tb.appendChild(tr);
+});
+</script>
+</body>
+</html>
